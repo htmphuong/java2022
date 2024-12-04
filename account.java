@@ -33,7 +33,7 @@ public class account extends JFrame {
 	JRadioButton rdoMale = new JRadioButton("Male");
 	JRadioButton rdoFemale = new JRadioButton("Female");
 	JLabel lblQualication = new JLabel("Qualification");
-	String qual[]= {"Doctor", "Master","Bachelor","Undergrade"};
+	String qual[]= {"Vietnam", "England","Singapore","Lao"};
 	JComboBox cboQualification = new JComboBox(qual);
 	JCheckBox cbComputer = new JCheckBox("Computer Science");
 	JCheckBox cbEconomic	= new JCheckBox("Economic");
