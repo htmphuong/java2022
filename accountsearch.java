@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.sql.ResultSet;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,7 +34,7 @@ public class accountsearch extends JFrame {
         panel.setLayout(new BorderLayout());
 
         // Table with data model
-        String[] columnNames = {"ID", "Name", "Age"};
+        String[] columnNames = {"Email", "Password", "Gender","Qualification", "Study Field"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(model);
         JScrollPane tableScrollPane = new JScrollPane(table);
@@ -45,7 +46,7 @@ public class accountsearch extends JFrame {
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new GridLayout(4, 2)); // 4 rows, 2 columns
 
-        JLabel labelId = new JLabel("ID:");
+        JLabel labelId = new JLabel("Email:");
         JTextField textFieldId = new JTextField();
         
         JLabel labelName = new JLabel("Name:");
@@ -54,7 +55,7 @@ public class accountsearch extends JFrame {
         JLabel labelAge = new JLabel("Age:");
         JTextField textFieldAge = new JTextField();
         
-        JButton addButton = new JButton("Add to Table");
+        JButton addButton = new JButton("Search");
 
         // Add components to the form panel
         formPanel.add(labelId);
@@ -71,18 +72,25 @@ public class accountsearch extends JFrame {
 
         // Add action listener to the "Add" button
         addButton.addActionListener(e -> {
-            // Retrieve the data from text fields
-            String id = textFieldId.getText();
-            String name = textFieldName.getText();
-            String age = textFieldAge.getText();
-
-            // Add data to the table
-            model.addRow(new Object[]{id, name, age});
-
-            // Clear the text fields after adding the row
-            textFieldId.setText("");
-            textFieldName.setText("");
-            textFieldAge.setText("");
+        	
+        	try {
+				DBAccess dbAccess = new DBAccess();
+				System.out.println("select * from account where email like '%"+textFieldId.getText()+"%'");
+				ResultSet rs = dbAccess.query("select * from account where email like '%"+textFieldId.getText()+"%'");
+				while(rs.next()) {
+					String email = rs.getString("email");
+					String pass = rs.getString("pass");
+					String gender = rs.getString("gender");
+					String qualification = rs.getString("qualification");
+					String field = rs.getString("studyfield");
+					Object row[]= new Object[] {email,pass,gender,qualification,field};
+					model.addRow(row);						
+				}
+				table.setModel(model);
+			} catch (Exception e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
         });
 
         // Add the panel to the frame
